@@ -30,7 +30,7 @@ const Page = () => {
           <div className='max-w-3xl w-full'>
             <ProjectsForm/>
           </div>
-          <ProjectList/>
+          {/* <ProjectList/> */}
         </section>
       </div>
     </div>
