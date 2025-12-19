@@ -1,5 +1,5 @@
 "use client";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import TextAreaAutosize from "react-textarea-autosize";
 import { ArrowUpIcon, Loader2Icon } from "lucide-react";
@@ -7,15 +7,14 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useState } from "react";
 import z from "zod";
-import { Spinner } from "@/components/ui/spinner"
+import { Spinner } from "@/components/ui/spinner";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Form, FormField } from "@/components/ui/form";
-// import { onInvoke } from "../actions";
-// import { useCreateProject } from "@/modules/projects/hooks/project";
+import { useCreateProject } from "@/module/projects/hooks/project";
 
-// import { onInvoke } from "../actions";
+
 
 const formSchema = z.object({
   content: z
@@ -78,14 +77,20 @@ const PROJECT_TEMPLATES = [
 const ProjectsForm = () => {
   const [isFocused, setIsFocused] = useState(false);
   const router = useRouter();
-  // const {mutateAsync , isPending} = useCreateProject()
+  const { mutateAsync, isPending } = useCreateProject();
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       content: "",
     },
-    mode:"onChange"
+    mode: "onChange",
+  });
+
+  const contentValue = useWatch({
+    control: form.control,
+    name: "content",
+    defaultValue: "",
   });
 
   const handleTemplate = (prompt) => {
@@ -94,22 +99,21 @@ const ProjectsForm = () => {
 
   const onSubmit = async (values) => {
     try {
-      const res = await mutateAsync(values.content)
-      router.push(`/projects/${res.id}`)
-      toast.success("Project created successfully")
-      form.reset()
+      const res = await mutateAsync(values.content);
+      router.push(`/projects/${res.id}`);
+      toast.success("Project created successfully");
+      form.reset();
     } catch (error) {
-       toast.error(error.message || "Failed to create project");
+      toast.error(error.message || "Failed to create project");
     }
   };
 
-
-  // const isButtonDisabled = isPending || !form.watch("content").trim()
+  const isButtonDisabled = isPending || !contentValue.trim();
 
   return (
     <div className="space-y-8">
       {/* Template Grid */}
-      
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         {PROJECT_TEMPLATES.map((template, index) => (
           <button
@@ -150,11 +154,11 @@ const ProjectsForm = () => {
             isFocused && "shadow-lg ring-2 ring-primary/20"
           )}
         >
-         <FormField
-         control={form.control}
-         name="content"
-         render={({field})=>(
-                <TextAreaAutosize
+          <FormField
+            control={form.control}
+            name="content"
+            render={({ field }) => (
+              <TextAreaAutosize
                 {...field}
                 // disabled={isPending}
                 placeholder="Describe what you want to create..."
@@ -163,8 +167,8 @@ const ProjectsForm = () => {
                 minRows={3}
                 maxRows={8}
                 className={cn(
-                  "pt-4 resize-none border-none w-full outline-none bg-transparent",
-                //   isPending && "opacity-50"
+                  "pt-4 resize-none border-none w-full outline-none bg-transparent"
+                  //   isPending && "opacity-50"
                 )}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
@@ -173,29 +177,27 @@ const ProjectsForm = () => {
                   }
                 }}
               />
-         )}
-         />   
+            )}
+          />
 
-         <div className="flex gap-x-2 items-end justify-between pt-2">
+          <div className="flex gap-x-2 items-end justify-between pt-2">
             <div className="text-[10px] text-muted-foreground font-mono">
-                 <kbd className="ml-auto pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
+              <kbd className="ml-auto pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
                 <span>&#8984;</span>Enter
               </kbd>
               &nbsp; to submit
             </div>
-            {/* <Button
-            className={cn("size-8 rounded-full" , 
-              isButtonDisabled && "bg-muted-foreground border"
-            )}
-            disabled={isButtonDisabled}
-            type="submit"
+            <Button
+              className={cn(
+                "size-8 rounded-full",
+                isButtonDisabled && "bg-muted-foreground border"
+              )}
+              disabled={isButtonDisabled}
+              type="submit"
             >
-              {
-                isPending ? (<Spinner/>) : (<ArrowUpIcon className="size-4"/>)
-              }
-                
-            </Button> */}
-         </div>
+              {isPending ? <Spinner /> : <ArrowUpIcon className="size-4" />}
+            </Button>
+          </div>
         </form>
       </Form>
     </div>

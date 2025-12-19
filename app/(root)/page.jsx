@@ -1,5 +1,5 @@
-import ProjectList from '@/components/ProjectList'
-import ProjectsForm from '@/components/ProjectsForm'
+import ProjectList from '@/module/home/components/ProjectList'
+import ProjectsForm from '@/module/home/components/ProjectsForm'
 import Image from 'next/image'
 import React from 'react'
 
@@ -26,11 +26,10 @@ const Page = () => {
             Create apps and websites by chatting with AI
           </p>
 
-
           <div className='max-w-3xl w-full'>
             <ProjectsForm/>
           </div>
-          {/* <ProjectList/> */}
+          <ProjectList/>
         </section>
       </div>
     </div>

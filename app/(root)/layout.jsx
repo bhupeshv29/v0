@@ -1,4 +1,4 @@
-import Navbar from '@/components/Navbar'
+import Navbar from '@/module/home/components/Navbar'
 import { onBoardUser } from '@/module/auth/actions'
 import React from 'react'
 

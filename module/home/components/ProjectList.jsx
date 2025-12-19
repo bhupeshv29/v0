@@ -1,6 +1,5 @@
-
 "use client";
-// import { useGetProjects } from "@/modules/projects/hooks/project";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -14,6 +13,7 @@ import { FolderKanban, Calendar, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 import Link from "next/link";
+import { useGetProjects } from "@/module/projects/hooks/project";
 
 const ProjectList = () => {
   const { data: projects, isPending } = useGetProjects();

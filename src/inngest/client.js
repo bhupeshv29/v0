@@ -1,2 +1,3 @@
 import { Inngest } from "inngest";
-export const inngest = new Inngest({ id: "vo-clone-build" });
+
+export const inngest = new Inngest({ id: "v0-clone-build" });
