@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: "V0 Clone",
-  description: "Text to Application",
+  description: "Text to Application convert",
 };
 
 export default function RootLayout({ children }) {
